@@ -24,3 +24,5 @@ A project based on this tutorial `https://machinelearningmastery.com/machine-lea
 ## Useful links
 
 Here is a site to get some more data sets: `https://archive.ics.uci.edu/ml/datasets.php`
+
+Machine Learning Resources for Python: `https://machinelearningmastery.com/start-here/#python`
