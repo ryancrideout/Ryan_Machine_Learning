@@ -23,19 +23,19 @@ filename = "iris.csv"
 names = ['sepal-length', 'sepal-width', 'petal-length', 'petal-width', 'class']
 dataset = read_csv(filename, names=names)
 
-# # Box and whisker plots
-# # Resource on what they are: 
-# # https://www.simplypsychology.org/boxplots.html#:~:text=In%20descriptive%20statistics%2C%20a%20box,(or%20percentiles)%20and%20averages.
-# dataset.plot(kind="box", subplots=True, layout=(2,2), sharex=False, sharey=False)
-# pyplot.show()
+# Box and whisker plots
+# Resource on what they are: 
+# https://www.simplypsychology.org/boxplots.html#:~:text=In%20descriptive%20statistics%2C%20a%20box,(or%20percentiles)%20and%20averages.
+dataset.plot(kind="box", subplots=True, layout=(2,2), sharex=False, sharey=False)
+pyplot.show()
 
-# # Histograms
-# dataset.hist()
-# pyplot.show()
+# Histograms
+dataset.hist()
+pyplot.show()
 
-# # Scatter plot matrix
-# scatter_matrix(dataset)
-# pyplot.show()
+# Scatter plot matrix
+scatter_matrix(dataset)
+pyplot.show()
 
 # Split-out validation dataset
 array = dataset.values
@@ -64,12 +64,12 @@ for name, model in models:
     cv_results = cross_val_score(model, X_train, Y_train, cv=k_fold, scoring='accuracy')
     results.append(cv_results)
     names.append(name)
-    # print('%s: %f (%f)' % (name, cv_results.mean(), cv_results.std()))
+    print('%s: %f (%f)' % (name, cv_results.mean(), cv_results.std()))
 
-# # Compare Algorithms
-# pyplot.boxplot(results, labels=names)
-# pyplot.title("Algorithm Comparison")
-# pyplot.show()
+# Compare Algorithms
+pyplot.boxplot(results, labels=names)
+pyplot.title("Algorithm Comparison")
+pyplot.show()
 
 # Make predictions on validation dataset
 model = SVC(gamma='auto')
