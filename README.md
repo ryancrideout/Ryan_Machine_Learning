@@ -30,10 +30,8 @@ Machine Learning Resources for Python: `https://machinelearningmastery.com/start
 
 ## Future Ideas
 I was too lazy to make a proper note so I just slapped it here - Age of Empires data?
+
 Website: https://www.ageofstatistics.com/statistics/criteria?game=aoe2&period=p03_v01&filter=rm_solo_all
-
 Github Repository: https://github.com/gowerc/age-of-statistics
-
 Account on Reddit: https://www.reddit.com/user/coolio9876/
-
 Source of Data: https://aoe2.net/#
