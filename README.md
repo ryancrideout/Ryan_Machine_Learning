@@ -12,6 +12,7 @@ pandas
 sklearn
 pipenv
 junypter
+requests
 ```
 
 Note that these libraries should also be in the Pipfile so be sure to check that out.
