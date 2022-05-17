@@ -23,6 +23,10 @@ Note that these libraries should also be in the Pipfile so be sure to check that
 
 A project based on this tutorial `https://machinelearningmastery.com/machine-learning-in-python-step-by-step/` to get my feet wet with machine learning.
 
+### AOE2_Stats
+
+An Age of Empires II machine learning project that I've decided to embark on - the idea is to be able to pull win/loss records from real games online and then do STATISTICS on it.
+
 ## Useful links
 
 Here is a site to get some more data sets: `https://archive.ics.uci.edu/ml/datasets.php`
