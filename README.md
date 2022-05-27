@@ -13,9 +13,13 @@ sklearn
 pipenv
 junypter
 requests
+Django
+pgadmin4
 ```
 
 Note that these libraries should also be in the Pipfile so be sure to check that out.
+
+Note we'll also need `Postgres`.
 
 ## Repositories:
 
