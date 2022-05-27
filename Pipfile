@@ -11,6 +11,8 @@ pandas = "*"
 sklearn = "*"
 jupyterlab = "*"
 requests = "*"
+django = "*"
+pgadmin4 = "*"
 
 [dev-packages]
 
