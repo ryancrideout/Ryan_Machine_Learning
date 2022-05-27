@@ -60,14 +60,14 @@ def get_all_matches_since_time(api_client=None, since=None, until=None):
     # This is the meat and the potatoes of the method.
     while timestamp < until:
         matches = api_client.fetch_matches(since=timestamp)
-        # Sort
+        # Sort matches based on timestamp, 
         sorted_matches = sorted(matches, key=lambda dict: dict['started'])
         for match in sorted_matches:
             timestamp = match['started']
-            print(match['started'])
-        # for match in matches:
-        #     print("Get match details, append to dictionary?")
-            # For last match, update timestamp to be the new one.
+            match_details = api_client.fetch_match_details(match['match_uuid'])
+            print(match_details['players']) # I think initially this is what we're interested in, we could get more match details later though.
+            # For player in match_details['players'], put data into django or something.
+       
 
 # This is just a test method to make sure things work. I will remove this IN TIME.
 def main():
