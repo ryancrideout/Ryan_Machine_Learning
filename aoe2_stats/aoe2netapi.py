@@ -1,3 +1,4 @@
+import time
 import json
 import requests
 
@@ -48,6 +49,26 @@ class AOE2NETAPI():
         return json.loads(response.content)
 
 
+def get_all_matches_since_time(api_client=None, since=None, until=None):
+    # Initial timestamp
+    timestamp = since
+    # Safety precaution if 'until' isn't set so we don't have infinite recursion.
+    if not until:
+        # Cast to int first to remove rounding errors.
+        until = int(time.time())
+
+    # This is the meat and the potatoes of the method.
+    while timestamp < until:
+        matches = api_client.fetch_matches(since=timestamp)
+        # Sort matches based on timestamp, 
+        sorted_matches = sorted(matches, key=lambda dict: dict['started'])
+        for match in sorted_matches:
+            timestamp = match['started']
+            match_details = api_client.fetch_match_details(match['match_uuid'])
+            print(match_details['players']) # I think initially this is what we're interested in, we could get more match details later though.
+            # For player in match_details['players'], put data into django or something.
+       
+
 # This is just a test method to make sure things work. I will remove this IN TIME.
 def main():
     api_client = AOE2NETAPI()
@@ -55,5 +76,10 @@ def main():
 
     # print(api_client.fetch_matches(since="1596238991")) # July 31st, 2020
     # print(api_client.fetch_match_details("0d9b38e1-1042-6a4c-bf73-af3221625368"))
+
+    get_all_matches_since_time(api_client=api_client, since=1596238991, until=1596241038)
+    #1652925670
+    #1596239141 - 1596240599 [started - finished] # I think we should sort by started.
+    #1596238991
 
 main()
