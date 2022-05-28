@@ -13,6 +13,7 @@ jupyterlab = "*"
 requests = "*"
 django = "*"
 pgadmin4 = "*"
+flask = "*"
 
 [dev-packages]
 
