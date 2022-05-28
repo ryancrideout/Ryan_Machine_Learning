@@ -18,7 +18,7 @@ pgadmin4
 flask
 ```
 
-Note that these libraries should also be in the Pipfile so be sure to check that out.
+Note that these libraries should also be in the Pipfile so be sure to check that out. Note that these installed libraries will let you run EVERYTHING in this repository.
 
 Note we'll also need `Postgres`.
 
@@ -37,14 +37,3 @@ An Age of Empires II machine learning project that I've decided to embark on - t
 Here is a site to get some more data sets: `https://archive.ics.uci.edu/ml/datasets.php`
 
 Machine Learning Resources for Python: `https://machinelearningmastery.com/start-here/#python`
-
-## Future Ideas
-I was too lazy to make a proper note so I just slapped it here - Age of Empires data?
-
-Website: https://www.ageofstatistics.com/statistics/criteria?game=aoe2&period=p03_v01&filter=rm_solo_all
-
-Github Repository: https://github.com/gowerc/age-of-statistics
-
-Account on Reddit: https://www.reddit.com/user/coolio9876/
-
-Source of Data: https://aoe2.net/#
