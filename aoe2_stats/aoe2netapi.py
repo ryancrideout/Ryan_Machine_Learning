@@ -1,7 +1,7 @@
 import time
 import json
 import requests
-
+import psycopg2
 
 class AOE2NETAPI():
     """
@@ -67,7 +67,37 @@ def get_all_matches_since_time(api_client=None, since=None, until=None):
             match_details = api_client.fetch_match_details(match['match_uuid'])
             print(match_details['players']) # I think initially this is what we're interested in, we could get more match details later though.
             # For player in match_details['players'], put data into django or something.
-       
+
+# How to connect to a database
+def insert_data():
+    '''
+    Handy tutorials?
+    https://www.postgresqltutorial.com/postgresql-python/connect/
+    https://www.postgresqltutorial.com/postgresql-python/insert/
+    https://www.postgresqltutorial.com/postgresql-python/create-tables/
+    '''
+    database_connection = psycopg2.connect(
+        host="localhost",
+        database="aoe2net_database",
+        user="postgres",
+        password="Kick492Off"
+    )
+    # Make a cursor
+    cursor = database_connection.cursor()
+
+    # Print out the database version.
+    print("PostgreSQL database version:")
+    # This gets the version
+    # cursor.execute('SELECT version()')
+    # This gets the database name?
+    cursor.execute('SELECT current_database()') # Great this works.
+
+    # Display the PostgreSQL database server version
+    database_version = cursor.fetchone()
+    print(database_version)
+
+    # Close the communication with the PostgreSQL
+    cursor.close()
 
 # This is just a test method to make sure things work. I will remove this IN TIME.
 def main():
@@ -77,9 +107,11 @@ def main():
     # print(api_client.fetch_matches(since="1596238991")) # July 31st, 2020
     # print(api_client.fetch_match_details("0d9b38e1-1042-6a4c-bf73-af3221625368"))
 
-    get_all_matches_since_time(api_client=api_client, since=1596238991, until=1596241038)
+    # get_all_matches_since_time(api_client=api_client, since=1596238991, until=1596241038)
     #1652925670
     #1596239141 - 1596240599 [started - finished] # I think we should sort by started.
     #1596238991
+
+    # insert_data()
 
 main()
