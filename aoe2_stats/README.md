@@ -1,3 +1,9 @@
+## Running Django
+
+To run Django, simply launch this command:
+
+```python manage.py runserver```
+
 ## Accessing the Database
 
 To actually run the web application of `pgAdmin` and access the database, you'll need to run the `pgAdmin` Python file. For me this looks like:
