@@ -3,6 +3,9 @@ import json
 import requests
 import psycopg2
 
+from aoe2net_django.wsgi import *
+from aoe2net_database.models import PlayerMatchStat
+
 class AOE2NETAPI():
     """
     The API I will use to collect data from https://aoe2.net/#. I will build upon this
@@ -69,7 +72,7 @@ def get_all_matches_since_time(api_client=None, since=None, until=None):
             # For player in match_details['players'], put data into django or something.
 
 # How to connect to a database
-def insert_data():
+def insert_data_sql():
     '''
     Handy tutorials?
     https://www.postgresqltutorial.com/postgresql-python/connect/
@@ -99,6 +102,14 @@ def insert_data():
     # Close the communication with the PostgreSQL
     cursor.close()
 
+def insert_data_django():
+    # How to import Django data?
+    # https://stackoverflow.com/questions/50074690/improperlyconfigured-requested-setting-installed-apps-but-settings-are-not-con
+    chump_data = PlayerMatchStat(civ="Teutons", civ_id=99)
+    chump_data.save()
+    # for i in range(6):
+    #     chump_data = PlayerMatchStat(civ="Teutons", civ_id=i)
+
 # This is just a test method to make sure things work. I will remove this IN TIME.
 def main():
     api_client = AOE2NETAPI()
@@ -112,6 +123,7 @@ def main():
     #1596239141 - 1596240599 [started - finished] # I think we should sort by started.
     #1596238991
 
-    # insert_data()
+    # insert_data_sql()
+    insert_data_django() # Alright this works like a dream. Now we need to clean this sucker up.
 
 main()
