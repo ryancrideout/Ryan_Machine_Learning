@@ -1,7 +1,6 @@
 import time
 import json
 import requests
-import psycopg2
 
 from aoe2net_django.wsgi import *
 from aoe2net_database.models import PlayerMatchStat
@@ -51,79 +50,43 @@ class AOE2NETAPI():
         response = requests.get("https://aoe2.net/api/match?uuid={}".format(match_id)) 
         return json.loads(response.content)
 
+    def get_all_matches_since_time(self, since=None, until=None):
+        # Initial timestamp
+        timestamp = since
+        # Safety precaution if 'until' isn't set so we don't have infinite recursion.
+        if not until:
+            # Cast to int first to remove rounding errors.
+            until = int(time.time())
 
-def get_all_matches_since_time(api_client=None, since=None, until=None):
-    # Initial timestamp
-    timestamp = since
-    # Safety precaution if 'until' isn't set so we don't have infinite recursion.
-    if not until:
-        # Cast to int first to remove rounding errors.
-        until = int(time.time())
+        # This is the meat and the potatoes of the method.
+        while timestamp < until:
+            matches = self.fetch_matches(since=timestamp)
+            # Sort matches based on timestamp, 
+            sorted_matches = sorted(matches, key=lambda dict: dict['started'])
+            for match in sorted_matches:
+                timestamp = match['started']
+                match_details = self.fetch_match_details(match['match_uuid'])
+                print(match_details.keys()) # I think initially this is what we're interested in, we could get more match details later though.
+                print(match_details)
 
-    # This is the meat and the potatoes of the method.
-    while timestamp < until:
-        matches = api_client.fetch_matches(since=timestamp)
-        # Sort matches based on timestamp, 
-        sorted_matches = sorted(matches, key=lambda dict: dict['started'])
-        for match in sorted_matches:
-            timestamp = match['started']
-            match_details = api_client.fetch_match_details(match['match_uuid'])
-            print(match_details['players']) # I think initially this is what we're interested in, we could get more match details later though.
-            # For player in match_details['players'], put data into django or something.
-
-# How to connect to a database
-def insert_data_sql():
-    '''
-    Handy tutorials?
-    https://www.postgresqltutorial.com/postgresql-python/connect/
-    https://www.postgresqltutorial.com/postgresql-python/insert/
-    https://www.postgresqltutorial.com/postgresql-python/create-tables/
-    '''
-    database_connection = psycopg2.connect(
-        host="localhost",
-        database="aoe2net_database",
-        user="postgres",
-        password="Kick492Off"
-    )
-    # Make a cursor
-    cursor = database_connection.cursor()
-
-    # Print out the database version.
-    print("PostgreSQL database version:")
-    # This gets the version
-    # cursor.execute('SELECT version()')
-    # This gets the database name?
-    cursor.execute('SELECT current_database()') # Great this works.
-
-    # Display the PostgreSQL database server version
-    database_version = cursor.fetchone()
-    print(database_version)
-
-    # Close the communication with the PostgreSQL
-    cursor.close()
-
-def insert_data_django():
-    # How to import Django data?
-    # https://stackoverflow.com/questions/50074690/improperlyconfigured-requested-setting-installed-apps-but-settings-are-not-con
-    chump_data = PlayerMatchStat(civ="Teutons", civ_id=99)
-    chump_data.save()
-    # for i in range(6):
-    #     chump_data = PlayerMatchStat(civ="Teutons", civ_id=i)
+    def insert_data_django():
+        # This is how we actually stuff data into Postgres databases.
+        # https://stackoverflow.com/questions/50074690/improperlyconfigured-requested-setting-installed-apps-but-settings-are-not-con
+        chump_data = PlayerMatchStat(civ="Teutons", civ_id=99)
+        # chump_data.save()
 
 # This is just a test method to make sure things work. I will remove this IN TIME.
 def main():
     api_client = AOE2NETAPI()
     api_client.setup()
 
-    # print(api_client.fetch_matches(since="1596238991")) # July 31st, 2020
-    # print(api_client.fetch_match_details("0d9b38e1-1042-6a4c-bf73-af3221625368"))
+    api_client.get_all_matches_since_time(api_client=api_client, since=1596238991, until=1596241038)
 
-    # get_all_matches_since_time(api_client=api_client, since=1596238991, until=1596241038)
-    #1652925670
-    #1596239141 - 1596240599 [started - finished] # I think we should sort by started.
-    #1596238991
+    # api_client.insert_data_django() # Alright this works like a dream. Now we need to clean this sucker up.
 
-    # insert_data_sql()
-    insert_data_django() # Alright this works like a dream. Now we need to clean this sucker up.
+    # TODO: Write a method or something to figure out EPOCH time and stuff. ARGH.
+    #       Also, find a way to revert EPOCH to date, and date to EPOCH
+    # 1596238991 - July 31st, 2020
+    # 1596241038 - Just after July 31st, 2020.
 
 main()
