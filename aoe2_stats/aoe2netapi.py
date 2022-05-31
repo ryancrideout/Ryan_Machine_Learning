@@ -14,10 +14,38 @@ class AOE2NETAPI():
     TODO: Add functionality to get specific player classes.
     """
     def __init__(self):
+        # TODO: Evaluate if this is how we want to store these variables. 
+        #       Something about this screams "BAD IDEA" to me...
+        # Civilizations
         self.id_civ_dict = {}
         self.civ_id_dict = {}
+        # Victory conditions
         self.id_victory_dict = {}
         self.victory_id_dict = {}
+        # Game Types
+        self.id_game_type_dict = {}
+        self.game_type_id_dict = {}
+        # Starting Age
+        self.id_age_dict = {}
+        self.age_id_dict = {}
+        # Map Type. E.G., Arabia, Nomad, etc.
+        self.id_map_type_dict = {}
+        self.map_type_id_dict = {}
+        # Rating Types
+        self.id_rating_type_dict = {}
+        self.rating_type_id_dict = {}
+        # Starting Resources
+        self.id_resource_dict = {}
+        self.resource_id_dict = {}
+        # Game Speed
+        self.id_speed_dict = {}
+        self.speed_id_dict = {}
+        # Visibility Settings. E.G., Fully Visible, Explored, etc.
+        self.id_visibility_dict = {}
+        self.visibility_id_dict = {}
+        # Map Size
+        self.id_map_size_dict = {}
+        self.map_size_id_dict = {}
 
     def setup(self):
         """
@@ -27,8 +55,12 @@ class AOE2NETAPI():
 
     def fetch_api_dicts(self):
         """
-        The reason why I have this as a separate method is becaues there may be more civilizations added
-        in the future, so we can't hard code it and it should be updated from time to time.
+        The reason why I have this as a separate method is becaues there may be more civilizations, game types,
+        etc. could be added in the future, so we can't hard code it and it should be updated from time to time.
+
+        Further note: There are some parameters in here that I didn't bother saving.
+
+        # TODO: Write some dang unit tests for these bad boys. Good grief.
         """
         response = requests.get("https://aoe2.net/api/strings?game=aoe2de&language=en") # Put this in a class somehow?
         api_strings = json.loads(response.content)
@@ -40,10 +72,57 @@ class AOE2NETAPI():
 
         # Set the victory strings
         victory_conditions = api_strings['victory']
-        api_strings.pop('civ')
-        print("What are the api strings?")
-        print(api_strings.keys())
-        print(api_strings['victory'])
+        for victory_condition in victory_conditions:
+            self.id_victory_dict[victory_condition["id"]] = victory_condition["string"]
+            self.victory_id_dict[victory_condition["string"]] = victory_condition["id"]
+
+        # Set the game types
+        game_types = api_strings['game_type']
+        for game_type in game_types:
+            self.id_game_type_dict[game_type["id"]] = game_type["string"]
+            self.game_type_id_dict[game_type["string"]] = game_type["id"]
+
+        # Set the age settings
+        age_settings = api_strings['age']
+        for age_setting in age_settings:
+            self.id_age_dict[age_setting["id"]] = age_setting["string"]
+            self.age_id_dict[age_setting["string"]] = age_setting["id"]
+
+        # Set the map types.
+        map_types = api_strings['map_type']
+        for map_type in map_types:
+            self.id_map_type_dict[map_type["id"]] = map_type["string"]
+            self.map_type_id_dict[map_type["string"]] = map_type["id"]
+
+        # Set the rating types
+        rating_types = api_strings['rating_type']
+        for rating_type in rating_types:
+            self.id_rating_type_dict[rating_type["id"]] = rating_type["string"]
+            self.rating_type_id_dict[rating_type["string"]] = rating_type["id"]
+
+        # Set the resources settings
+        resources_settings = api_strings['resources']
+        for resource_setting in resources_settings:
+            self.id_resource_dict[resource_setting["id"]] = resource_setting["string"]
+            self.resource_id_dict[resource_setting["string"]] = resource_setting["id"]
+
+        # Set the speed settings
+        speed_settings = api_strings['speed']
+        for speed_setting in speed_settings:
+            self.id_speed_dict[speed_setting["id"]] = speed_setting["string"]
+            self.speed_id_dict[speed_setting["string"]] = speed_setting["id"]
+
+        # Set the visibility settings
+        visibility_settings = api_strings['visibility']
+        for visibility_setting in visibility_settings:
+            self.id_visibility_dict[visibility_setting["id"]] = visibility_setting["string"]
+            self.id_visibility_dict[visibility_setting["string"]] = visibility_setting["id"]
+
+        # Set the map sizes
+        map_sizes = api_strings['map_size']
+        for map_size in map_sizes:
+            self.id_map_size_dict[map_size["id"]] = map_size["string"]
+            self.map_size_id_dict[map_size["string"]] = map_size["id"]
 
     def fetch_matches(self, since=None, count=10):
         """
