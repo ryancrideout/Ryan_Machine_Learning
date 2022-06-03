@@ -46,6 +46,14 @@ class AOE2NETAPI():
         # Map Size
         self.id_map_size_dict = {}
         self.map_size_id_dict = {}
+        # Languages - I could implement this, but for now we're all in English baby.
+        '''
+        self.id_language_dict = {}
+        self.language_id_dict = {}
+        '''
+        # Leaderboard - I think this has to do with rankings?
+        self.id_leaderboard_dict = {}
+        self.leaderboard_id_dict = {}
 
     def setup(self):
         """
@@ -58,7 +66,8 @@ class AOE2NETAPI():
         The reason why I have this as a separate method is becaues there may be more civilizations, game types,
         etc. could be added in the future, so we can't hard code it and it should be updated from time to time.
 
-        Further note: There are some parameters in here that I didn't bother saving.
+        Further note: There are some parameters in here that I didn't bother saving. Namely just the language one
+                      for now, as I'm going to do this all in English first.
 
         # TODO: Write some dang unit tests for these bad boys. Good grief.
         """
@@ -123,6 +132,12 @@ class AOE2NETAPI():
         for map_size in map_sizes:
             self.id_map_size_dict[map_size["id"]] = map_size["string"]
             self.map_size_id_dict[map_size["string"]] = map_size["id"]
+
+        # Set the leaderboard types.
+        leaderboards = api_strings['map_size']
+        for leaderboard in leaderboards:
+            self.id_leaderboard_dict[leaderboard["id"]] = leaderboard["string"]
+            self.leaderboard_id_dict[leaderboard["string"]] = leaderboard["id"]
 
     def fetch_matches(self, since=None, count=10):
         """
