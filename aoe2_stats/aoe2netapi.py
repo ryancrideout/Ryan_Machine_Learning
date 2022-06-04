@@ -241,7 +241,7 @@ def main():
     api_client = AOE2NETAPI()
     api_client.setup()
 
-    # api_client.get_all_matches_since_time(since=1596238991, until=1596241038)
+    api_client.get_all_matches_since_time(since=1596238991, until=1596241038)
 
     # api_client.insert_data_django() # Alright this works like a dream. Now we need to clean this sucker up.
 
