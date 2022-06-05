@@ -2,6 +2,50 @@ from django.db import models
 
 # Create your models here.
 
+class Match(models.Model):
+    match_id = models.IntegerField()
+    lobby_id = models.IntegerField(null=True)
+    match_uuid = models.CharField(max_length=80)
+    version = models.CharField(null=True)
+    name = models.CharField(max_length=80, null=True)
+    num_players = models.IntegerField()
+    num_slots = models.IntegerField()
+    average_rating = models.IntegerField(null=True)
+    cheats = models.BooleanField(default=False)
+    full_tech_tree = models.BooleanField(default=False)
+    ending_age = models.IntegerField(null=True)
+    expansion = models.CharField(max_length=80, null=True)
+    game_type = models.IntegerField()
+    has_custom_content = models.BooleanField(null=True)
+    has_password = models.BooleanField(null=True)
+    lock_speed = models.BooleanField(default=True)
+    lock_teams = models.BooleanField(default=True)
+    map_size = models.IntegerField()
+    population = models.IntegerField()
+    ranked = models.BooleanField(null=True)
+    leaderboard_id = models.IntegerField()
+    rating_type = models.IntegerField()
+    resources = models.IntegerField()
+    # I have no idea what rms is.
+    rms = models.CharField(max_length=80, null=True)
+    scenario = models.CharField(max_length=80, null=True)
+    server = models.CharField(max_length=80, null=True)
+    shared_exploration = models.BooleanField(default=False)
+    speed = models.IntegerField()
+    starting_age = models.IntegerField()
+    team_together = models.BooleanField(default=True)
+    team_positions = models.BooleanField(default=True)
+    treaty_length = models.IntegerField()
+    turbo = models.BooleanField(default=False)
+    victory = models.IntegerField()
+    victory_time = models.IntegerField()
+    visibility = models.IntegerField()
+    # 'opened' is when the game lobby opened up.
+    opened = models.IntegerField()
+    started = models.IntegerField()
+    finished = models.IntegerField()
+
+
 class PlayerMatchStat(models.Model):
     # I added the "civ" model because it's just so unintuitive to
     # search civilizations by ids and not by name.
@@ -24,49 +68,6 @@ class PlayerMatchStat(models.Model):
     team = models.IntegerField(null=True)
     civ_alpha_id = models.IntegerField(null=True)
     won = models.BooleanField()
-
-class Match(models.Model):
-    match_id = models.IntegerField()
-    lobby_id = models.IntegerField(null=True)
-    match_uuid = models.CharField(max_length=80)
-    version = models.CharField(null=True)
-    name = models.CharField(max_length=80, null=True)
-    num_players = models.IntegerField()
-    num_slots = models.IntegerField()
-    average_rating = models.IntegerField(null=True)
-    cheats = models.BooleanField(default=False)
-
-    '''
-    'full_tech_tree': False, 
-    'ending_age': 5, 
-    'expansion': None, 
-    'game_type': 0, 
-    'has_custom_content': None, 
-    'has_password': None, 
-    'lock_speed': True, 
-    'lock_teams': True, 
-    'map_size': 2, 
-    'map_type': 31, 
-    'pop': 200, 
-    'ranked': True, 
-    'leaderboard_id': 4, 
-    'rating_type': 4, 
-    'resources': 0, 
-    'rms': None, 
-    'scenario': None, 
-    'server': None, 
-    'shared_exploration': False, 
-    'speed': 2, 
-    'starting_age': 0, 
-    'team_together': True, 
-    'team_positions': True, 
-    'treaty_length': 0, 
-    'turbo': False, 
-    'victory': 1, 
-    'victory_time': 0, 
-    'visibility': 0, 
-    'opened': 1596239070, 
-    'started': 1596239070, 
-    'finished': 1596242350, 
-    'players': [
-    '''
+    # Relevant for helping me understand Many-to-One relationships:
+    # https://stackoverflow.com/questions/6928692/how-to-express-a-one-to-many-relationship-in-django
+    match = models.ForeignKey(Match, related_name="players")
