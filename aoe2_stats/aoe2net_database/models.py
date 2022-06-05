@@ -6,7 +6,7 @@ class Match(models.Model):
     match_id = models.IntegerField()
     lobby_id = models.IntegerField(null=True)
     match_uuid = models.CharField(max_length=80)
-    version = models.CharField(null=True)
+    version = models.CharField(max_length=80, null=True)
     name = models.CharField(max_length=80, null=True)
     num_players = models.IntegerField()
     num_slots = models.IntegerField()
@@ -64,10 +64,10 @@ class PlayerMatchStat(models.Model):
     wins = models.IntegerField(null=True)
     streak = models.IntegerField(null=True)
     drops = models.IntegerField(null=True)
-    color = models.IntegerField()
+    color = models.IntegerField(null=True)
     team = models.IntegerField(null=True)
     civ_alpha_id = models.IntegerField(null=True)
     won = models.BooleanField()
     # Relevant for helping me understand Many-to-One relationships:
     # https://stackoverflow.com/questions/6928692/how-to-express-a-one-to-many-relationship-in-django
-    match = models.ForeignKey(Match, related_name="players")
+    match = models.ForeignKey(Match, related_name="players", on_delete=models.CASCADE)
