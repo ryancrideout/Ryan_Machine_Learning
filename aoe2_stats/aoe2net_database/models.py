@@ -21,6 +21,7 @@ class Match(models.Model):
     lock_speed = models.BooleanField(default=True)
     lock_teams = models.BooleanField(default=True)
     map_size = models.IntegerField()
+    map = models.CharField(max_length=80)
     population = models.IntegerField()
     ranked = models.BooleanField(null=True)
     leaderboard_id = models.IntegerField()

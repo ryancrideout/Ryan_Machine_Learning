@@ -3,7 +3,7 @@ import json
 import requests
 
 from aoe2net_django.wsgi import *
-from aoe2net_database.models import PlayerMatchStat
+from aoe2net_database.models import PlayerMatchStat, Match
 
 class AOE2NETAPI():
     """
@@ -169,72 +169,86 @@ class AOE2NETAPI():
             sorted_matches = sorted(matches, key=lambda dict: dict['started'])
             for match in sorted_matches:
                 timestamp = match['started']
-                match_details = self.fetch_match_details(match['match_uuid'])
-                print(match_details.keys()) # I think initially this is what we're interested in, we could get more match details later though.
-                print(match_details)
-                '''
-                dict_keys([
-                    'match_id', 'lobby_id', 'match_uuid', 'version', 'name', 'num_players', 'num_slots', 'average_rating', 'cheats', 'full_tech_tree', 'ending_age', 'expansion', 'game_type', 
-                    'has_custom_content', 'has_password', 'lock_speed', 'lock_teams', 'map_size', 'map_type', 'pop', 'ranked', 'leaderboard_id', 'rating_type', 'resources', 'rms', 'scenario', 
-                    'server', 'shared_exploration', 'speed', 'starting_age', 'team_together', 'team_positions', 'treaty_length', 'turbo', 'victory', 'victory_time', 'visibility', 'opened', 
-                    'started', 'finished', 'players'])
-                '''
-                '''
-                {
-                    'match_id': '32257097', 
-                    'lobby_id': None, 
-                    'match_uuid': 'b6472ffc-bb5b-7649-bbe0-88a7e96e1886', 
-                    'version': None, 
-                    'name': 'AUTOMATCH', 
-                    'num_players': 4, 
-                    'num_slots': 4, 
-                    'average_rating': None, 
-                    'cheats': False, 
-                    'full_tech_tree': False, 
-                    'ending_age': 5, 
-                    'expansion': None, 
-                    'game_type': 0, 
-                    'has_custom_content': None, 
-                    'has_password': None, 
-                    'lock_speed': True, 
-                    'lock_teams': True, 
-                    'map_size': 2, 
-                    'map_type': 31, 
-                    'pop': 200, 
-                    'ranked': True, 
-                    'leaderboard_id': 4, 
-                    'rating_type': 4, 
-                    'resources': 0, 
-                    'rms': None, 
-                    'scenario': None, 
-                    'server': None, 
-                    'shared_exploration': False, 
-                    'speed': 2, 
-                    'starting_age': 0, 
-                    'team_together': True, 
-                    'team_positions': True, 
-                    'treaty_length': 0, 
-                    'turbo': False, 
-                    'victory': 1, 
-                    'victory_time': 0, 
-                    'visibility': 0, 
-                    'opened': 1596239070, 
-                    'started': 1596239070, 
-                    'finished': 1596242350, 
-                    'players': [
-                        {'profile_id': 2421746, 'steam_id': None, 'name': None, 'clan': None, 'country': None, 'slot': 1, 'slot_type': 1, 'rating': 1358, 'rating_change': None, 'games': None, 'wins': None, 'streak': None, 'drops': None, 'color': 4, 'team': 1, 'civ': 3, 'civ_alpha': 11, 'won': True}, 
-                        {'profile_id': 2384128, 'steam_id': None, 'name': None, 'clan': None, 'country': None, 'slot': 2, 'slot_type': 1, 'rating': 1247, 'rating_change': None, 'games': None, 'wins': None, 'streak': None, 'drops': None, 'color': 1, 'team': 2, 'civ': 12, 'civ_alpha': 24, 'won': False}, 
-                        {'profile_id': 3165630, 'steam_id': None, 'name': None, 'clan': None, 'country': None, 'slot': 3, 'slot_type': 1, 'rating': None, 'rating_change': None, 'games': None, 'wins': None, 'streak': None, 'drops': None, 'color': 2, 'team': 1, 'civ': 8, 'civ_alpha': 25, 'won': True}, 
-                        {'profile_id': 1493900, 'steam_id': None, 'name': None, 'clan': None, 'country': None, 'slot': 4, 'slot_type': 1, 'rating': 1246, 'rating_change': None, 'games': None, 'wins': None, 'streak': None, 'drops': None, 'color': 3, 'team': 2, 'civ': 13, 'civ_alpha': 6, 'won': False}
-                        ]
-                    }
-                '''
+                match_data = self.fetch_match_details(match['match_uuid'])
+                # Grab the player details.
+                players = match_data.pop('players')
+                match_model = self.insert_match(match_data)
+                for player in players:
+                    self.insert_playermatchstat(player, match_model)
 
-    def insert_data_django():
+    def insert_match(self, match_data):
+        match = Match(
+            match_id=match_data['match_id'],
+            lobby_id=match_data['lobby_id'],
+            match_uuid=match_data['match_uuid'],
+            version=match_data['version'],
+            name=match_data['name'],
+            num_players=match_data['num_players'],
+            num_slots=match_data['num_slots'],
+            average_rating=match_data['average_rating'],
+            cheats=match_data['cheats'],
+            full_tech_tree=match_data['full_tech_tree'],
+            ending_age=match_data['ending_age'],
+            expansion=match_data['expansion'],
+            game_type=match_data['game_type'],
+            has_custom_content=match_data['has_custom_content'],
+            has_password=match_data['has_password'],
+            lock_speed=match_data['lock_speed'],
+            lock_teams=match_data['lock_teams'],
+            map_size=match_data['map_size'],
+            map=match_data['map_type'],
+            population=match_data['pop'],
+            ranked=match_data['ranked'],
+            leaderboard_id=match_data['leaderboard_id'],
+            rating_type=match_data['rating_type'],
+            resources=match_data['resources'],
+            rms=match_data['rms'],
+            scenario=match_data['scenario'],
+            server=match_data['server'],
+            shared_exploration=match_data['shared_exploration'],
+            speed=match_data['speed'],
+            starting_age=match_data['starting_age'],
+            team_together=match_data['team_together'],
+            team_positions=match_data['team_positions'],
+            treaty_length=match_data['treaty_length'],
+            turbo=match_data['turbo'],
+            victory=match_data['victory'],
+            victory_time=match_data['victory_time'],
+            visibility=match_data['visibility'],
+            opened=match_data['opened'],
+            started=match_data['started'],
+            finished=match_data['finished'],
+        )
+        # match.save()
+        return match
+
+    def insert_playermatchstat(self, player_data: dict, match_model: dict):
         # This is how we actually stuff data into Postgres databases.
         # https://stackoverflow.com/questions/50074690/improperlyconfigured-requested-setting-installed-apps-but-settings-are-not-con
-        chump_data = PlayerMatchStat(civ="Teutons", civ_id=99)
-        # chump_data.save()
+        player_match_stat = PlayerMatchStat(
+            civ=self.id_civ_dict[player_data['civ']], 
+            civ_id=player_data['civ'],
+            profile_id=player_data['profile_id'],
+            steam_id=player_data['steam_id'],
+            name=player_data['name'],
+            clan=player_data['clan'],
+            country=player_data['country'],
+            slot=player_data['slot'],
+            slot_type=player_data['slot_type'],
+            rating=player_data['rating'],
+            rating_change=player_data['rating_change'],
+            games=player_data['games'],
+            wins=player_data['wins'],
+            streak=player_data['streak'],
+            drops=player_data['drops'],
+            color=player_data['color'],
+            team=player_data['team'],
+            civ_alpha_id=player_data['civ_alpha'],
+            won=player_data['won'],
+            match=match_model
+            )
+        # player_match_stat.save()
+        return player_match_stat
 
 # This is just a test method to make sure things work. I will remove this IN TIME.
 def main():
