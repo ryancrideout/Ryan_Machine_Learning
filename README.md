@@ -37,3 +37,7 @@ An Age of Empires II machine learning project that I've decided to embark on - t
 Here is a site to get some more data sets: `https://archive.ics.uci.edu/ml/datasets.php`
 
 Machine Learning Resources for Python: `https://machinelearningmastery.com/start-here/#python`
+
+Here are a couple links about GitHub structures for machine learning projects:
+- http://drivendata.github.io/cookiecutter-data-science/#directory-structure
+- https://github.com/drivendata/cookiecutter-data-science
