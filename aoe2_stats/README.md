@@ -30,3 +30,9 @@ Github Repository: https://github.com/gowerc/age-of-statistics
 Account on Reddit: https://www.reddit.com/user/coolio9876/
 
 Source of Data: https://aoe2.net/#
+
+### Predictive Behaviour Modelling Links
+
+These links can be helpful in determining how to do predictive analysis on the dataset I hope to collect.
+- https://www.section.io/engineering-education/applying-ai-and-ml-to-predict-consumer-behavior/
+- https://builtin.com/machine-learning/predictive-behavior-modeling
