@@ -36,3 +36,5 @@ Source of Data: https://aoe2.net/#
 These links can be helpful in determining how to do predictive analysis on the dataset I hope to collect.
 - https://www.section.io/engineering-education/applying-ai-and-ml-to-predict-consumer-behavior/
 - https://builtin.com/machine-learning/predictive-behavior-modeling
+- https://www.mathworks.com/discovery/predictive-modeling.html (This has links to other resources it looks like)
+- https://www.sas.com/en_gb/insights/articles/analytics/a-guide-to-predictive-analytics-and-machine-learning.html
