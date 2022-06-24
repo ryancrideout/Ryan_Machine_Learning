@@ -24,10 +24,8 @@ Instructions are based on [this tutorial.](https://stackpython.medium.com/how-to
 ## Getting Started
 
 1. First order of business will be installing the Pipenv environment. To accomplish this, you want to be in the `Ryan_Machine_Learning` directory, and then you simply run `pipenv install`. This will install the required libraries. Note that you'll also need to be on Python version 3.
-2. Then, run `pipenv shell` to activate the virtual environment. From here, you'll be able to run Python scripts willy-nilly. If you've installed the Database and Django already, then you're done. If not, you'll have to do that.
+2. Then, run `pipenv shell` to activate the virtual environment. From here, you'll be able to run Python scripts willy-nilly. If you've installed the Database and Django already, then you're done. If not, you'll have to do that. Note that Django should be installed when you do `pipenv install`.
 3. To install the Database, see the above instructions - `General Database Installation Instructions`.
-
-TODO: Fill this out more. How do we install Django?
 
 ## Relevant Links
 
