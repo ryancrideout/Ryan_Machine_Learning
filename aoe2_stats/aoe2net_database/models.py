@@ -47,6 +47,8 @@ class Match(models.Model):
     started = models.IntegerField()
     finished = models.IntegerField()
 
+class Player(models.Model):
+    profile_id = models.IntegerField(null=False, unique=True)
 
 class PlayerMatchStat(models.Model):
     # I added the "civ" model because it's just so unintuitive to
@@ -72,4 +74,10 @@ class PlayerMatchStat(models.Model):
     won = models.BooleanField()
     # Relevant for helping me understand Many-to-One relationships:
     # https://stackoverflow.com/questions/6928692/how-to-express-a-one-to-many-relationship-in-django
+    # Further note - the related names might be confusing, but it's in the style of "Match.players"
+    # or "Player.matches"
     match = models.ForeignKey(Match, related_name="players", on_delete=models.CASCADE)
+    player = models.ForeignKey(Player, related_name="matches", on_delete=models.PROTECT)
+
+
+

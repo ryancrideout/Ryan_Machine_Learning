@@ -3,7 +3,7 @@ import json
 import requests
 
 from aoe2net_django.wsgi import *
-from aoe2net_database.models import PlayerMatchStat, Match
+from aoe2net_database.models import PlayerMatchStat, Match, Player
 
 class AOE2NETAPI():
     """
@@ -14,7 +14,7 @@ class AOE2NETAPI():
     TODO: Add functionality to get specific player classes.
     """
     def __init__(self):
-        # TODO: Evaluate if this is how we want to store these variables. 
+        # TODO: Evaluate if this is how we want to store these variables.
         #       Something about this screams "BAD IDEA" to me...
         # Civilizations
         self.id_civ_dict = {}
@@ -76,7 +76,7 @@ class AOE2NETAPI():
         # Set the civilizations
         civilizations = api_strings['civ']
         for civ in civilizations:
-            self.id_civ_dict[civ["id"]] = civ["string"] 
+            self.id_civ_dict[civ["id"]] = civ["string"]
             self.civ_id_dict[civ["string"]] = civ["id"]
 
         # Set the victory strings
@@ -144,14 +144,14 @@ class AOE2NETAPI():
         Fetches matches from a specific epoch time. Ideally we go through and then check the specific
         details of the match to get further information.
         """
-        response = requests.get("https://aoe2.net/api/matches?game=aoe2de&count={}&since={}".format(count, since)) 
+        response = requests.get("https://aoe2.net/api/matches?game=aoe2de&count={}&since={}".format(count, since))
         return json.loads(response.content)
 
     def fetch_match_details(self, match_id):
         """
         Gather specific information from a match. This is how we'll gather win rates and other information.
         """
-        response = requests.get("https://aoe2.net/api/match?uuid={}".format(match_id)) 
+        response = requests.get("https://aoe2.net/api/match?uuid={}".format(match_id))
         return json.loads(response.content)
 
     def get_all_matches_since_time(self, since=None, until=None):
@@ -165,7 +165,7 @@ class AOE2NETAPI():
         # This is the meat and the potatoes of the method.
         while timestamp < until:
             matches = self.fetch_matches(since=timestamp)
-            # Sort matches based on timestamp, 
+            # Sort matches based on timestamp,
             sorted_matches = sorted(matches, key=lambda dict: dict['started'])
             for match in sorted_matches:
                 timestamp = match['started']
@@ -174,7 +174,33 @@ class AOE2NETAPI():
                 players = match_data.pop('players')
                 match_model = self.insert_match(match_data)
                 for player in players:
-                    self.insert_playermatchstat(player, match_model)
+                    # Can't add a player if they don't have a profile id!
+                    if player['profile_id'] is not None:
+                        player_model = self.insert_player(player['profile_id'])
+                        self.insert_playermatchstat(player, match_model, player_model)
+
+    def get_player_match_history_data(self, profile_id, count=5):
+        """
+        Given a profile ID, this gets the X most recent matches of said player. Unfortunately, this
+        won't get all of the matches. (only up to 1000)
+        """
+        response = requests.get("https://aoe2.net/api/player/matches?game=aoe2de&profile_id={}&count={}".format(profile_id, count))
+        return json.loads(response.content)
+
+    def insert_player(self, profile_id):
+        """
+        This takes player data and then puts it into the database. If player data
+        already exists in the database, then it updates it with additional match data.
+        """
+        # First check to see if the player already exists in the database.
+        # CAUTION - I could see making database calls becoming expensive very quickly...
+        player = Player.objects.filter(profile_id=profile_id).first()
+        if not player:
+            player = Player(
+                profile_id=profile_id,
+            )
+            # player.save()
+        return player
 
     def insert_match(self, match_data):
         match = Match(
@@ -196,7 +222,7 @@ class AOE2NETAPI():
             lock_speed=match_data['lock_speed'],
             lock_teams=match_data['lock_teams'],
             map_size=match_data['map_size'],
-            map=self.id_map_type_dict[match_data['civ']],
+            map=self.id_map_type_dict[match_data['map_type']],
             map_id=match_data['map_type'],
             population=match_data['pop'],
             ranked=match_data['ranked'],
@@ -223,11 +249,11 @@ class AOE2NETAPI():
         # match.save()
         return match
 
-    def insert_playermatchstat(self, player_data: dict, match_model: dict):
+    def insert_playermatchstat(self, player_data: dict, match_model: Match, player_model: Player):
         # This is how we actually stuff data into Postgres databases.
         # https://stackoverflow.com/questions/50074690/improperlyconfigured-requested-setting-installed-apps-but-settings-are-not-con
         player_match_stat = PlayerMatchStat(
-            civ=self.id_civ_dict[player_data['civ']], 
+            civ=self.id_civ_dict[player_data['civ']],
             civ_id=player_data['civ'],
             profile_id=player_data['profile_id'],
             steam_id=player_data['steam_id'],
@@ -246,7 +272,8 @@ class AOE2NETAPI():
             team=player_data['team'],
             civ_alpha_id=player_data['civ_alpha'],
             won=player_data['won'],
-            match=match_model
+            match=match_model,
+            player=player_model,
             )
         # player_match_stat.save()
         return player_match_stat
@@ -256,9 +283,17 @@ def main():
     api_client = AOE2NETAPI()
     api_client.setup()
 
-    api_client.get_all_matches_since_time(since=1596238991, until=1596241038)
+    # api_client.get_all_matches_since_time(since=1596238991, until=1596241038)
 
-    # api_client.insert_data_django() # Alright this works like a dream. Now we need to clean this sucker up.
+    """
+    Example profile IDs:
+    347123
+    3006662
+    1380246
+    406135
+    2849622
+    """
+    print(api_client.get_player_match_history_data(profile_id=3006662, count=1))
 
     # TODO: Write a method or something to figure out EPOCH time and stuff. ARGH.
     #       Also, find a way to revert EPOCH to date, and date to EPOCH
