@@ -75,7 +75,7 @@ class PlayerMatchStat(models.Model):
     # Relevant for helping me understand Many-to-One relationships:
     # https://stackoverflow.com/questions/6928692/how-to-express-a-one-to-many-relationship-in-django
     # Further note - the related names might be confusing, but it's in the style of "Match.players"
-    # or Player.matches
+    # or "Player.matches"
     match = models.ForeignKey(Match, related_name="players", on_delete=models.CASCADE)
     player = models.ForeignKey(Player, related_name="matches", on_delete=models.PROTECT)
 
