@@ -14,7 +14,7 @@ class AOE2NETAPI():
     TODO: Add functionality to get specific player classes.
     """
     def __init__(self):
-        # TODO: Evaluate if this is how we want to store these variables. 
+        # TODO: Evaluate if this is how we want to store these variables.
         #       Something about this screams "BAD IDEA" to me...
         # Civilizations
         self.id_civ_dict = {}
@@ -76,7 +76,7 @@ class AOE2NETAPI():
         # Set the civilizations
         civilizations = api_strings['civ']
         for civ in civilizations:
-            self.id_civ_dict[civ["id"]] = civ["string"] 
+            self.id_civ_dict[civ["id"]] = civ["string"]
             self.civ_id_dict[civ["string"]] = civ["id"]
 
         # Set the victory strings
@@ -144,14 +144,14 @@ class AOE2NETAPI():
         Fetches matches from a specific epoch time. Ideally we go through and then check the specific
         details of the match to get further information.
         """
-        response = requests.get("https://aoe2.net/api/matches?game=aoe2de&count={}&since={}".format(count, since)) 
+        response = requests.get("https://aoe2.net/api/matches?game=aoe2de&count={}&since={}".format(count, since))
         return json.loads(response.content)
 
     def fetch_match_details(self, match_id):
         """
         Gather specific information from a match. This is how we'll gather win rates and other information.
         """
-        response = requests.get("https://aoe2.net/api/match?uuid={}".format(match_id)) 
+        response = requests.get("https://aoe2.net/api/match?uuid={}".format(match_id))
         return json.loads(response.content)
 
     def get_all_matches_since_time(self, since=None, until=None):
@@ -165,7 +165,7 @@ class AOE2NETAPI():
         # This is the meat and the potatoes of the method.
         while timestamp < until:
             matches = self.fetch_matches(since=timestamp)
-            # Sort matches based on timestamp, 
+            # Sort matches based on timestamp,
             sorted_matches = sorted(matches, key=lambda dict: dict['started'])
             for match in sorted_matches:
                 timestamp = match['started']
@@ -175,6 +175,18 @@ class AOE2NETAPI():
                 match_model = self.insert_match(match_data)
                 for player in players:
                     self.insert_playermatchstat(player, match_model)
+
+    def get_all_player_ids_since_time(self):
+        """
+        Maybe we try to get these from the matches? I'm not sure.
+        """
+        print("Going to have to figure out how to get all of the player statistics.")
+
+    def get_player_data(self):
+        """
+        I think we maybe figure this out first.
+        """
+        print("Get all of the data for ONE player.")
 
     def insert_match(self, match_data):
         match = Match(
@@ -227,7 +239,7 @@ class AOE2NETAPI():
         # This is how we actually stuff data into Postgres databases.
         # https://stackoverflow.com/questions/50074690/improperlyconfigured-requested-setting-installed-apps-but-settings-are-not-con
         player_match_stat = PlayerMatchStat(
-            civ=self.id_civ_dict[player_data['civ']], 
+            civ=self.id_civ_dict[player_data['civ']],
             civ_id=player_data['civ'],
             profile_id=player_data['profile_id'],
             steam_id=player_data['steam_id'],
