@@ -10,6 +10,8 @@ To actually run the web application of `pgAdmin` and access the database, you'll
 
 ```python "G:\\PostgreSQL\pgAdmin 4\web\pgAdmin4.py"```
 
+But in short, you want to be executing the `pgAdmin4.py` file.
+
 ## General Database Installation Instructions
 
 Instructions are based on [this tutorial.](https://stackpython.medium.com/how-to-start-django-project-with-a-database-postgresql-aaa1d74659d8)
