@@ -77,7 +77,7 @@ class PlayerMatchStat(models.Model):
     # Further note - the related names might be confusing, but it's in the style of "Match.players"
     # or Player.matches
     match = models.ForeignKey(Match, related_name="players", on_delete=models.CASCADE)
-    player = models.ForeignKey(Player, related_name="matches", on_delete=models.SET_NULL)
+    player = models.ForeignKey(Player, related_name="matches", on_delete=models.PROTECT)
 
 
 
