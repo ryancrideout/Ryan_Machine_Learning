@@ -200,6 +200,7 @@ class AOE2NETAPI():
                 profile_id=profile_id,
             )
             player.save()
+            print("Player {} has been saved.".format(profile_id))
         return player
 
     def insert_match(self, match_data):
@@ -250,6 +251,7 @@ class AOE2NETAPI():
                 finished=match_data['finished'],
             )
             match.save()
+            print("Match {} has been saved.".format(match_data['match_uuid']))
         return match
 
     def insert_playermatchstat(self, player_data: dict, match_model: Match, player_model: Player):
@@ -282,6 +284,7 @@ class AOE2NETAPI():
                 player=player_model,
                 )
             player_match_stat.save()
+            print("PlayerMatch [Match: {} - Player: {}] has been saved.".format(match_model.match_uuid, player_data['profile_id']))
         return player_match_stat
 
 # This is just a test method to make sure things work. I will remove this IN TIME.
