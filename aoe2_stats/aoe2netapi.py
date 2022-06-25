@@ -199,83 +199,89 @@ class AOE2NETAPI():
             player = Player(
                 profile_id=profile_id,
             )
-            # player.save()
+            player.save()
         return player
 
     def insert_match(self, match_data):
-        match = Match(
-            match_id=match_data['match_id'],
-            lobby_id=match_data['lobby_id'],
-            match_uuid=match_data['match_uuid'],
-            version=match_data['version'],
-            name=match_data['name'],
-            num_players=match_data['num_players'],
-            num_slots=match_data['num_slots'],
-            average_rating=match_data['average_rating'],
-            cheats=match_data['cheats'],
-            full_tech_tree=match_data['full_tech_tree'],
-            ending_age=match_data['ending_age'],
-            expansion=match_data['expansion'],
-            game_type=match_data['game_type'],
-            has_custom_content=match_data['has_custom_content'],
-            has_password=match_data['has_password'],
-            lock_speed=match_data['lock_speed'],
-            lock_teams=match_data['lock_teams'],
-            map_size=match_data['map_size'],
-            map=self.id_map_type_dict[match_data['map_type']],
-            map_id=match_data['map_type'],
-            population=match_data['pop'],
-            ranked=match_data['ranked'],
-            leaderboard_id=match_data['leaderboard_id'],
-            rating_type=match_data['rating_type'],
-            resources=match_data['resources'],
-            rms=match_data['rms'],
-            scenario=match_data['scenario'],
-            server=match_data['server'],
-            shared_exploration=match_data['shared_exploration'],
-            speed=match_data['speed'],
-            starting_age=match_data['starting_age'],
-            team_together=match_data['team_together'],
-            team_positions=match_data['team_positions'],
-            treaty_length=match_data['treaty_length'],
-            turbo=match_data['turbo'],
-            victory=match_data['victory'],
-            victory_time=match_data['victory_time'],
-            visibility=match_data['visibility'],
-            opened=match_data['opened'],
-            started=match_data['started'],
-            finished=match_data['finished'],
-        )
-        # match.save()
+        # First check to see if the Match already exists - if it does, do not add it.
+        match = Match.objects.filter(match_uuid=match_data['match_uuid']).first()
+        if not match:
+            match = Match(
+                match_id=match_data['match_id'],
+                lobby_id=match_data['lobby_id'],
+                match_uuid=match_data['match_uuid'],
+                version=match_data['version'],
+                name=match_data['name'],
+                num_players=match_data['num_players'],
+                num_slots=match_data['num_slots'],
+                average_rating=match_data['average_rating'],
+                cheats=match_data['cheats'],
+                full_tech_tree=match_data['full_tech_tree'],
+                ending_age=match_data['ending_age'],
+                expansion=match_data['expansion'],
+                game_type=match_data['game_type'],
+                has_custom_content=match_data['has_custom_content'],
+                has_password=match_data['has_password'],
+                lock_speed=match_data['lock_speed'],
+                lock_teams=match_data['lock_teams'],
+                map_size=match_data['map_size'],
+                map=self.id_map_type_dict[match_data['map_type']],
+                map_id=match_data['map_type'],
+                population=match_data['pop'],
+                ranked=match_data['ranked'],
+                leaderboard_id=match_data['leaderboard_id'],
+                rating_type=match_data['rating_type'],
+                resources=match_data['resources'],
+                rms=match_data['rms'],
+                scenario=match_data['scenario'],
+                server=match_data['server'],
+                shared_exploration=match_data['shared_exploration'],
+                speed=match_data['speed'],
+                starting_age=match_data['starting_age'],
+                team_together=match_data['team_together'],
+                team_positions=match_data['team_positions'],
+                treaty_length=match_data['treaty_length'],
+                turbo=match_data['turbo'],
+                victory=match_data['victory'],
+                victory_time=match_data['victory_time'],
+                visibility=match_data['visibility'],
+                opened=match_data['opened'],
+                started=match_data['started'],
+                finished=match_data['finished'],
+            )
+            match.save()
         return match
 
     def insert_playermatchstat(self, player_data: dict, match_model: Match, player_model: Player):
         # This is how we actually stuff data into Postgres databases.
         # https://stackoverflow.com/questions/50074690/improperlyconfigured-requested-setting-installed-apps-but-settings-are-not-con
-        player_match_stat = PlayerMatchStat(
-            civ=self.id_civ_dict[player_data['civ']],
-            civ_id=player_data['civ'],
-            profile_id=player_data['profile_id'],
-            steam_id=player_data['steam_id'],
-            name=player_data['name'],
-            clan=player_data['clan'],
-            country=player_data['country'],
-            slot=player_data['slot'],
-            slot_type=player_data['slot_type'],
-            rating=player_data['rating'],
-            rating_change=player_data['rating_change'],
-            games=player_data['games'],
-            wins=player_data['wins'],
-            streak=player_data['streak'],
-            drops=player_data['drops'],
-            color=player_data['color'],
-            team=player_data['team'],
-            civ_alpha_id=player_data['civ_alpha'],
-            won=player_data['won'],
-            match=match_model,
-            player=player_model,
-            )
-        # player_match_stat.save()
+        # First check to see if the PlayerMatchStat already exists - if it does, do not add it.
+        player_match_stat = PlayerMatchStat.objects.filter(match=match_model, player=player_model).first()
+        if not player_match_stat:
+            player_match_stat = PlayerMatchStat(
+                civ=self.id_civ_dict[player_data['civ']],
+                civ_id=player_data['civ'],
+                profile_id=player_data['profile_id'],
+                steam_id=player_data['steam_id'],
+                name=player_data['name'],
+                clan=player_data['clan'],
+                country=player_data['country'],
+                slot=player_data['slot'],
+                slot_type=player_data['slot_type'],
+                rating=player_data['rating'],
+                rating_change=player_data['rating_change'],
+                games=player_data['games'],
+                wins=player_data['wins'],
+                streak=player_data['streak'],
+                drops=player_data['drops'],
+                color=player_data['color'],
+                team=player_data['team'],
+                civ_alpha_id=player_data['civ_alpha'],
+                won=player_data['won'],
+                match=match_model,
+                player=player_model,
+                )
+            player_match_stat.save()
         return player_match_stat
 
 # This is just a test method to make sure things work. I will remove this IN TIME.
@@ -283,7 +289,7 @@ def main():
     api_client = AOE2NETAPI()
     api_client.setup()
 
-    # api_client.get_all_matches_since_time(since=1596238991, until=1596241038)
+    api_client.get_all_matches_since_time(since=1596238991, until=1640995200)
 
     """
     Example profile IDs:
@@ -293,11 +299,12 @@ def main():
     406135
     2849622
     """
-    print(api_client.get_player_match_history_data(profile_id=3006662, count=1))
+    # print(api_client.get_player_match_history_data(profile_id=3006662, count=1))
 
     # TODO: Write a method or something to figure out EPOCH time and stuff. ARGH.
     #       Also, find a way to revert EPOCH to date, and date to EPOCH
     # 1596238991 - July 31st, 2020
     # 1596241038 - Just after July 31st, 2020.
+    # 1640995200 - January 1st, 2022
 
 main()
