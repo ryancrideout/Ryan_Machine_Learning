@@ -287,27 +287,27 @@ class AOE2NETAPI():
             print("PlayerMatch [Match: {} - Player: {}] has been saved.".format(match_model.match_uuid, player_data['profile_id']))
         return player_match_stat
 
-# This is just a test method to make sure things work. I will remove this IN TIME.
-def main():
-    api_client = AOE2NETAPI()
-    api_client.setup()
+# # This is just a test method to make sure things work. I will remove this IN TIME.
+# def main():
+#     api_client = AOE2NETAPI()
+#     api_client.setup()
 
-    api_client.get_all_matches_since_time(since=1596238991, until=1640995200)
+#     api_client.get_all_matches_since_time(since=1596238991, until=1640995200)
 
-    """
-    Example profile IDs:
-    347123
-    3006662
-    1380246
-    406135
-    2849622
-    """
-    # print(api_client.get_player_match_history_data(profile_id=3006662, count=1))
+#     """
+#     Example profile IDs:
+#     347123
+#     3006662
+#     1380246
+#     406135
+#     2849622
+#     """
+#     # print(api_client.get_player_match_history_data(profile_id=3006662, count=1))
 
-    # TODO: Write a method or something to figure out EPOCH time and stuff. ARGH.
-    #       Also, find a way to revert EPOCH to date, and date to EPOCH
-    # 1596238991 - July 31st, 2020
-    # 1596241038 - Just after July 31st, 2020.
-    # 1640995200 - January 1st, 2022
+#     # TODO: Write a method or something to figure out EPOCH time and stuff. ARGH.
+#     #       Also, find a way to revert EPOCH to date, and date to EPOCH
+#     # 1596238991 - July 31st, 2020
+#     # 1596241038 - Just after July 31st, 2020.
+#     # 1640995200 - January 1st, 2022
 
-main()
+# main()
