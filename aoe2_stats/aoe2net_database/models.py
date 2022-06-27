@@ -27,7 +27,7 @@ class Match(models.Model):
     ranked = models.BooleanField(null=True)
     leaderboard_id = models.IntegerField()
     rating_type = models.IntegerField()
-    resources = models.IntegerField()
+    resources = models.IntegerField(null=True)
     # I have no idea what rms is.
     rms = models.CharField(max_length=160, null=True)
     scenario = models.CharField(max_length=160, null=True)
