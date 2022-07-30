@@ -11,6 +11,8 @@ def main():
     # 1596238991 - July 31st, 2020
     # 1596241038 - Just after July 31st, 2020.
     # 1640995200 - January 1st, 2022
+    print("Starting the script.")
     api_client.get_all_matches_since_time(since=1596238991, until=1640995200)
+    print("Script complete!")
 
 main()

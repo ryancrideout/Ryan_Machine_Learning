@@ -164,6 +164,9 @@ class AOE2NETAPI():
 
         # This is the meat and the potatoes of the method.
         while timestamp < until:
+            print("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -")
+            print("Fetching matches...")
+            print("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -")
             matches = self.fetch_matches(since=timestamp)
             # Sort matches based on timestamp,
             sorted_matches = sorted(matches, key=lambda dict: dict['started'])
