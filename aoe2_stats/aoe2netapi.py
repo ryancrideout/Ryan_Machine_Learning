@@ -164,6 +164,11 @@ class AOE2NETAPI():
 
         # This is the meat and the potatoes of the method.
         while timestamp < until:
+            # Might be worth it to have like a minute delay here so we don't flood the servers.
+            # Maybe a 5 minute delay?
+            print("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -")
+            print("Fetching matches...")
+            print("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -")
             matches = self.fetch_matches(since=timestamp)
             # Sort matches based on timestamp,
             sorted_matches = sorted(matches, key=lambda dict: dict['started'])
@@ -206,9 +211,14 @@ class AOE2NETAPI():
         return player
 
     def insert_match(self, match_data):
-        # First check to see if the Match already exists - if it does, do not add it.
         match = Match.objects.filter(match_uuid=match_data['match_uuid']).first()
         if not match:
+            # Do data check here first, some of these map types may or may not
+            # eixst in the id_map_type_dict.
+            try:
+                map_name = self.id_map_type_dict[match_data['map_type']]
+            except KeyError:
+                map_name = "Unknown"
             match = Match(
                 match_id=match_data['match_id'],
                 lobby_id=match_data['lobby_id'],
@@ -228,7 +238,8 @@ class AOE2NETAPI():
                 lock_speed=match_data['lock_speed'],
                 lock_teams=match_data['lock_teams'],
                 map_size=match_data['map_size'],
-                map=self.id_map_type_dict[match_data['map_type']],
+                # map=self.id_map_type_dict[match_data['map_type']],
+                map=map_name,
                 map_id=match_data['map_type'],
                 population=match_data['pop'],
                 ranked=match_data['ranked'],

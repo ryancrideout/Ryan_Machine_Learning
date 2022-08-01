@@ -11,7 +11,7 @@ class Match(models.Model):
     num_players = models.IntegerField()
     num_slots = models.IntegerField()
     average_rating = models.IntegerField(null=True)
-    cheats = models.BooleanField(default=False)
+    cheats = models.BooleanField(default=False, null=True)
     full_tech_tree = models.BooleanField(default=False)
     ending_age = models.IntegerField(null=True)
     expansion = models.CharField(max_length=160, null=True)
