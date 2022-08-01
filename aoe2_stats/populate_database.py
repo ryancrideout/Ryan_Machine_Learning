@@ -21,9 +21,14 @@ def main():
 
     # Savepoint:
     """
-    Player 313908 has been saved.
-    PlayerMatch [Match: 4ae95078-a1f3-664e-8ac0-e2da3d853a06 - Player: 313908] has been saved.
-    Player 528154 has been saved.
-    PlayerMatch [Match: 4ae95078-a1f3-664e-8ac0-e2da3d853a06 - Player: 528154] has been saved.
+    Match 6baf388f-b7b2-7246-a391-711feb10c1b4 has been saved.
+    Player 2688268 already exists!
+    PlayerMatch [Match: 6baf388f-b7b2-7246-a391-711feb10c1b4 - Player: 2688268] has been saved.
+    Player 270492 has been saved.
+    PlayerMatch [Match: 6baf388f-b7b2-7246-a391-711feb10c1b4 - Player: 270492] has been saved.
+    Player 2686183 already exists!
+    PlayerMatch [Match: 6baf388f-b7b2-7246-a391-711feb10c1b4 - Player: 2686183] has been saved.
+    Player 1094730 has been saved.
+    PlayerMatch [Match: 6baf388f-b7b2-7246-a391-711feb10c1b4 - Player: 1094730] has been saved.
     """
 main()
