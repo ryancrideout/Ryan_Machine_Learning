@@ -164,6 +164,8 @@ class AOE2NETAPI():
 
         # This is the meat and the potatoes of the method.
         while timestamp < until:
+            # Might be worth it to have like a minute delay here so we don't flood the servers.
+            # Maybe a 5 minute delay?
             print("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -")
             print("Fetching matches...")
             print("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -")
@@ -210,6 +212,55 @@ class AOE2NETAPI():
 
     def insert_match(self, match_data):
         # First check to see if the Match already exists - if it does, do not add it.
+        print("Here is the match data")
+        print(match_data)
+        """
+        {
+            'match_id': '32689261', 
+            'lobby_id': None, 
+            'match_uuid': '72323d23-9cbd-3840-9df7-6d56cf99008e', 
+            'version': None, 
+            'name': 'Partida de vanessa', 
+            'num_players': 5, 
+            'num_slots': 5, 
+            'average_rating': None, 
+            'cheats': False, 
+            'full_tech_tree': False, 
+            'ending_age': 0, 
+            'expansion': None, 
+            'game_type': 0, 
+            'has_custom_content': None, 
+            'has_password': None, 
+            'lock_speed': False, 
+            'lock_teams': True, 
+            'map_size': 3, 
+            'map_type': 129, 
+            'pop': 200, 
+            'ranked': False, 
+            'leaderboard_id': 0, 
+            'rating_type': 0, 
+            'resources': 0, 
+            'rms': None, 
+            'scenario': None, 
+            'server': None, 
+            'shared_exploration': False, 
+            'speed': 3, 
+            'starting_age': 0, 
+            'team_together': True, 
+            'team_positions': False, 
+            'treaty_length': 0, 
+            'turbo': False, 
+            'victory': 1, 
+            'victory_time': 1, 
+            'visibility': 0, 
+            'opened': 1596514555, 
+            'started': 1596514555, 
+            'finished': 1596515679}
+        """
+        print("Okay what is this then?")
+        print(self.id_map_type_dict)
+        # Okay this gives a key error: self.id_map_type_dict[match_data['map_type']]
+        # Need to do some engineering to resolve this somehow. That'll be tomorrow though.
         match = Match.objects.filter(match_uuid=match_data['match_uuid']).first()
         if not match:
             match = Match(
