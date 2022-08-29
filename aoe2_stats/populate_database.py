@@ -13,27 +13,30 @@ def main():
     # 1640995200 - January 1st, 2022
 
     # Most recent timestamp -
-    # 1596994958
-    # August 9th, 2020
+    # 1597590774
+    # August 16th, 2020
 
     print("Starting the script.")
-    api_client.get_all_matches_since_time(since=1596994958, until=1640995200)
+    api_client.get_all_matches_since_time(since=1597009893, until=1640995200)
     print("Script complete!")
 
     # Savepoint:
     """
-    Match 461766c6-a7ce-2045-856a-ad1c40686bee has been saved.
-    Player 2589306 already exists!
-    PlayerMatch [Match: 461766c6-a7ce-2045-856a-ad1c40686bee - Player: 2589306] has been saved.
-    Player 2898768 already exists!
-    PlayerMatch [Match: 461766c6-a7ce-2045-856a-ad1c40686bee - Player: 2898768] has been saved.
-    Player 2209305 already exists!
-    PlayerMatch [Match: 461766c6-a7ce-2045-856a-ad1c40686bee - Player: 2209305] has been saved.
-    Player 2155445 already exists!
-    PlayerMatch [Match: 461766c6-a7ce-2045-856a-ad1c40686bee - Player: 2155445] has been saved.
-    Player 252391 already exists!
-    PlayerMatch [Match: 461766c6-a7ce-2045-856a-ad1c40686bee - Player: 252391] has been saved.
-    Player 3031980 has been saved.
-    PlayerMatch [Match: 461766c6-a7ce-2045-856a-ad1c40686bee - Player: 3031980] has been saved.
+    Match cda2b635-2448-2843-94ef-930625028ff0 has been saved.
+    Player 2801332 has been saved.
+    PlayerMatch [Match: cda2b635-2448-2843-94ef-930625028ff0 - Player: 2801332] has been saved.
+    Player 2084019 has been saved.
+    PlayerMatch [Match: cda2b635-2448-2843-94ef-930625028ff0 - Player: 2084019] has been saved.
+    Player 1502262 has been saved.
+    PlayerMatch [Match: cda2b635-2448-2843-94ef-930625028ff0 - Player: 1502262] has been saved.
+    Player 1685269 has been saved.
+    PlayerMatch [Match: cda2b635-2448-2843-94ef-930625028ff0 - Player: 1685269] has been saved.
+    Player 239149 already exists!
+    PlayerMatch [Match: cda2b635-2448-2843-94ef-930625028ff0 - Player: 239149] has been saved.
+    Player 1376938 already exists!
+    PlayerMatch [Match: cda2b635-2448-2843-94ef-930625028ff0 - Player: 1376938] has been saved.
+    Player 916167 already exists!
+    PlayerMatch [Match: cda2b635-2448-2843-94ef-930625028ff0 - Player: 916167] has been saved.
+    Player 3257474 has been saved.
     """
 main()
