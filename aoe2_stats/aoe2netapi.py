@@ -152,7 +152,12 @@ class AOE2NETAPI():
         Gather specific information from a match. This is how we'll gather win rates and other information.
         """
         response = requests.get("https://aoe2.net/api/match?uuid={}".format(match_id))
-        return json.loads(response.content)
+        # Match isn't found, print out the error message and then return nothing.
+        if response.status_code == 404:
+            print(response.content.decode("utf-8") + f" - Match {match_id}")
+            return None
+        else:
+            return json.loads(response.content)
 
     def get_all_matches_since_time(self, since=None, until=None):
         # Initial timestamp
@@ -175,14 +180,15 @@ class AOE2NETAPI():
             for match in sorted_matches:
                 timestamp = match['started']
                 match_data = self.fetch_match_details(match['match_uuid'])
-                # Grab the player details.
-                players = match_data.pop('players')
-                match_model = self.insert_match(match_data)
-                for player in players:
-                    # Can't add a player if they don't have a profile id!
-                    if player['profile_id'] is not None:
-                        player_model = self.insert_player(player['profile_id'])
-                        self.insert_playermatchstat(player, match_model, player_model)
+                # Grab the player details, if we have match_data.
+                if match_data:
+                    players = match_data.pop('players')
+                    match_model = self.insert_match(match_data)
+                    for player in players:
+                        # Can't add a player if they don't have a profile id!
+                        if player['profile_id'] is not None:
+                            player_model = self.insert_player(player['profile_id'])
+                            self.insert_playermatchstat(player, match_model, player_model)
 
     def get_player_match_history_data(self, profile_id, count=5):
         """
