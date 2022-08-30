@@ -13,30 +13,19 @@ def main():
     # 1640995200 - January 1st, 2022
 
     # Most recent timestamp -
-    # 1597590774
-    # August 16th, 2020
+    # 1597720006
+    # August 18th, 2020
 
     print("Starting the script.")
-    api_client.get_all_matches_since_time(since=1597009893, until=1640995200)
+    api_client.get_all_matches_since_time(since=1597590774, until=1640995200)
     print("Script complete!")
 
     # Savepoint:
     """
-    Match cda2b635-2448-2843-94ef-930625028ff0 has been saved.
-    Player 2801332 has been saved.
-    PlayerMatch [Match: cda2b635-2448-2843-94ef-930625028ff0 - Player: 2801332] has been saved.
-    Player 2084019 has been saved.
-    PlayerMatch [Match: cda2b635-2448-2843-94ef-930625028ff0 - Player: 2084019] has been saved.
-    Player 1502262 has been saved.
-    PlayerMatch [Match: cda2b635-2448-2843-94ef-930625028ff0 - Player: 1502262] has been saved.
-    Player 1685269 has been saved.
-    PlayerMatch [Match: cda2b635-2448-2843-94ef-930625028ff0 - Player: 1685269] has been saved.
-    Player 239149 already exists!
-    PlayerMatch [Match: cda2b635-2448-2843-94ef-930625028ff0 - Player: 239149] has been saved.
-    Player 1376938 already exists!
-    PlayerMatch [Match: cda2b635-2448-2843-94ef-930625028ff0 - Player: 1376938] has been saved.
-    Player 916167 already exists!
-    PlayerMatch [Match: cda2b635-2448-2843-94ef-930625028ff0 - Player: 916167] has been saved.
-    Player 3257474 has been saved.
+    Match c3fc10ac-0b8a-ef4c-9d28-809b8bee51c4 has been saved.
+    Player 1143932 already exists!
+    PlayerMatch [Match: c3fc10ac-0b8a-ef4c-9d28-809b8bee51c4 - Player: 1143932] has been saved.
+    Player 712233 already exists!
+    PlayerMatch [Match: c3fc10ac-0b8a-ef4c-9d28-809b8bee51c4 - Player: 712233] has been saved.
     """
 main()
