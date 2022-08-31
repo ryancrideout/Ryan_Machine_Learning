@@ -17,15 +17,24 @@ def main():
     # August 18th, 2020
 
     print("Starting the script.")
-    api_client.get_all_matches_since_time(since=1597590774, until=1640995200)
+    # TODO: Take the information from the savepoint and update the most recent timestamp + api_client.
+    api_client.get_all_matches_since_time(since=1597720006, until=1640995200)
     print("Script complete!")
 
     # Savepoint:
     """
-    Match c3fc10ac-0b8a-ef4c-9d28-809b8bee51c4 has been saved.
-    Player 1143932 already exists!
-    PlayerMatch [Match: c3fc10ac-0b8a-ef4c-9d28-809b8bee51c4 - Player: 1143932] has been saved.
-    Player 712233 already exists!
-    PlayerMatch [Match: c3fc10ac-0b8a-ef4c-9d28-809b8bee51c4 - Player: 712233] has been saved.
+    Match a73e70e2-8e6f-274b-a13a-9f031343ffc8 has been saved.
+    Player 2905582 already exists!
+    PlayerMatch [Match: a73e70e2-8e6f-274b-a13a-9f031343ffc8 - Player: 2905582] has been saved.
+    Player 304001 already exists!
+    PlayerMatch [Match: a73e70e2-8e6f-274b-a13a-9f031343ffc8 - Player: 304001] has been saved.
+    Player 784758 already exists!
+    PlayerMatch [Match: a73e70e2-8e6f-274b-a13a-9f031343ffc8 - Player: 784758] has been saved.
+    Player 233587 already exists!
+    PlayerMatch [Match: a73e70e2-8e6f-274b-a13a-9f031343ffc8 - Player: 233587] has been saved.
+    Player 505903 already exists!
+    PlayerMatch [Match: a73e70e2-8e6f-274b-a13a-9f031343ffc8 - Player: 505903] has been saved.
+    Player 2896055 already exists!
+    PlayerMatch [Match: a73e70e2-8e6f-274b-a13a-9f031343ffc8 - Player: 2896055] has been saved.
     """
 main()
