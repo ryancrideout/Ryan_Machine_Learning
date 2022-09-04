@@ -1,13 +1,14 @@
-from aoe2net_database.models import Player
+from aoe2net_django.wsgi import *
+from aoe2net_database.models import Player, PlayerMatchStat
 from aoe2netapi import AOE2NETAPI
 # Match, PlayerMatchStat
 
 class PlayerStatistics():
     def __init__(self, player, start_elo, end_elo, civ_picker):
-        self.start_elo = 0
-        self.end_elo = 0
-        self.civ_picker = False
-        self.player = None
+        self.player = player
+        self.start_elo = start_elo
+        self.end_elo = end_elo
+        self.civ_picker = civ_picker
 
 # This whole dang thing should really be a class.
 def collect_player_stats():
@@ -23,9 +24,13 @@ def collect_player_stats():
     for player in players:
         is_civ_picker = False
 
-        player_matches = player.matches
-        # ARGH WE STILL NEED THE TIME THING.
-        player_matches.order_by('TIME THAT WE DO NOT HAVE')
+        player_matches = player.matches.filter(player=player.id)
+        # player_matches = player.matches.match.started
+        # Note: I thought about putting the time on the "PlayerMatch" Model,
+        # But have decided against it as that really is duplicate information.
+        # That, and it really does make sense to have that information on the 
+        # Match model.
+        player_matches = player_matches.order_by("match__started")
 
         # Also, we want the player's first 50 matches - that's where
         # most of the improvement would occur I would think.
@@ -123,6 +128,8 @@ def run_analysis(civ_pickers, non_civ_pickers):
     """
 def main():
     civ_pickers, non_civ_pickers = collect_player_stats()
-    run_analysis(civ_pickers, non_civ_pickers)
+    print(civ_pickers)
+    print(non_civ_pickers)
+    # run_analysis(civ_pickers, non_civ_pickers)
 
 main()
