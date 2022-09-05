@@ -1,5 +1,5 @@
 from aoe2net_django.wsgi import *
-from aoe2net_database.models import Player, PlayerMatchStat
+from aoe2net_database.models import Player, Match, PlayerMatchStat
 from aoe2netapi import AOE2NETAPI
 # Match, PlayerMatchStat
 
@@ -17,11 +17,26 @@ def collect_player_stats():
     api_client.setup()
     players = Player.objects.all()
 
+    # Something like this.
+    matches = Match.objects.all().filter()
+    # Need to filter out the MATCHES based on this. Hrrmm...
+    # Do I want 1v1 Random Map
+    # OR
+    # 1v1 Random Map Quick Play?
+    """
+    print(api_client.rating_type_id_dict)
+    {'Unranked': 0, '1v1 Death Match': 1, '1v1 Random Map': 2, 'Team Death Match': 3, 'Team Random Map': 4, '1v1 Random Map Quick Play': 5, 
+    'Team Random Map Quick Play': 6, '1v1 Empire Wars Quick Play': 7, 'Team Empire Wars Quick Play': 8, 'Battle Royale Quick Play': 9, '1v1 Empire Wars': 13, 
+    'Team Empire Wars': 14}
+    """
+
     # Prep the data?
     civ_pickers = []
     non_civ_pickers = []
 
+    i = 0
     for player in players:
+        i += 1
         is_civ_picker = False
 
         player_matches = player.matches.filter(player=player.id)
@@ -34,16 +49,23 @@ def collect_player_stats():
 
         # Also, we want the player's first 50 matches - that's where
         # most of the improvement would occur I would think.
-        player_matches = player_matches[0:50]
+        # NOTE: I think this slice is causing problems for Django. Maybe.
+        # Commented out, for now.
+        # player_matches = player_matches[0:50]
 
         total_matches_played = player_matches.count()
-        print(total_matches_played) # Not sure what to do yet if less than 50 matches.
+        # print(total_matches_played) # Not sure what to do yet if less than 50 matches.
+
+        # If we have less than 10 matches played, then that's just not enough to get
+        # data from.
+        if total_matches_played < 10:
+            continue
 
         # Brain wave - should we be saving this to a model somehow?
         civ_played_count = {}
         for civilization in api_client.civ_id_dict.keys():
-            civ_count = player_matches.filter(civ=civilization).count()
-            civ_played_count = civ_played_count[civilization] = civ_count
+            civ_count = player.matches.filter(player=player.id, civ=civilization).count()
+            civ_played_count[civilization] = civ_count
 
             if civ_count >= (total_matches_played * 0.7):
                 is_civ_picker = True
@@ -51,7 +73,11 @@ def collect_player_stats():
         # This is a very rudimentary way to do this, but we'll just check the ELO
         # of the first and last match.
         first_match = player_matches[0]
-        last_match = player_matches[-1]        
+        last_match = player_matches[total_matches_played - 1]
+
+        # print("We're getting ratings, right?")
+        # print(first_match.rating) # Have to make sure we have 1v1's and we are ranked.
+        # print(last_match.rating)
 
         player_statistic = PlayerStatistics(
             player, 
@@ -64,6 +90,9 @@ def collect_player_stats():
             civ_pickers.append(player_statistic)
         else:
             non_civ_pickers.append(player_statistic)
+
+        if i % 1000 == 0:
+            print(f"Working... processed {i} players...")
 
     return civ_pickers, non_civ_pickers
 
@@ -127,9 +156,9 @@ def run_analysis(civ_pickers, non_civ_pickers):
         Beyond that, just make averages of the ELO shift. Hopefully this ends up being informative.
     """
 def main():
+    print("Collecting player statistics...")
     civ_pickers, non_civ_pickers = collect_player_stats()
-    print(civ_pickers)
-    print(non_civ_pickers)
-    # run_analysis(civ_pickers, non_civ_pickers)
+    print("Beginning the the analysis...")
+    run_analysis(civ_pickers, non_civ_pickers)
 
 main()
