@@ -17,8 +17,17 @@ def collect_player_stats():
     api_client.setup()
     players = Player.objects.all()
 
-    # Something like this.
-    matches = Match.objects.all().filter()
+    # Need to collect all of the ranked 1v1 matches as that'll be easiest to determine ELO changes.
+    ranked_1v1_matches = Match.objects.all().filter(game_type=2) # 5670
+    ranked_1v1_match_ids = [match.id for match in ranked_1v1_matches]
+
+    """
+    itemset_list = [itemset1, itemset2, itemset3]
+    itemset_list_ids = [itemset.id for itemset in itemset_list]
+    itemset_queryset = ItemSet.objects.filter(id__in=itemset_list_ids)
+    items = Item.objects.filter(itemsets__in=itemset_queryset)
+    """
+
     # Need to filter out the MATCHES based on this. Hrrmm...
     # Do I want 1v1 Random Map
     # OR
@@ -39,8 +48,8 @@ def collect_player_stats():
         i += 1
         is_civ_picker = False
 
-        player_matches = player.matches.filter(player=player.id)
-        # player_matches = player.matches.match.started
+        player_matches = player.matches.filter(player=player.id, match__in=ranked_1v1_match_ids)
+
         # Note: I thought about putting the time on the "PlayerMatch" Model,
         # But have decided against it as that really is duplicate information.
         # That, and it really does make sense to have that information on the 
@@ -72,6 +81,8 @@ def collect_player_stats():
 
         # This is a very rudimentary way to do this, but we'll just check the ELO
         # of the first and last match.
+        # NOTE: We might need to do some sneaky business if the first match doesn't have an
+        #       ELO rating.
         first_match = player_matches[0]
         last_match = player_matches[total_matches_played - 1]
 
