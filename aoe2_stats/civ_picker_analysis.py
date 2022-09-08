@@ -83,12 +83,15 @@ def collect_player_stats():
         # of the first and last match.
         # NOTE: We might need to do some sneaky business if the first match doesn't have an
         #       ELO rating.
-        first_match = player_matches[0]
+        if player_matches[0].rating == None:
+            first_match = player_matches[1]
+        else:
+            first_match = player_matches[0]
         last_match = player_matches[total_matches_played - 1]
 
-        # print("We're getting ratings, right?")
-        # print(first_match.rating) # Have to make sure we have 1v1's and we are ranked.
-        # print(last_match.rating)
+        print("We're getting ratings, right?")
+        print(first_match.rating) # Have to make sure we have 1v1's and we are ranked.
+        print(last_match.rating)
 
         player_statistic = PlayerStatistics(
             player, 
