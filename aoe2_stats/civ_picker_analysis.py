@@ -18,7 +18,9 @@ def collect_player_stats():
     players = Player.objects.all()
 
     # Need to collect all of the ranked 1v1 matches as that'll be easiest to determine ELO changes.
-    ranked_1v1_matches = Match.objects.all().filter(game_type=2) # 5670
+    ranked_1v1_matches = Match.objects.all().filter(game_type=0, rating_type=2) # 5670 # 42016 # 9510
+    # print(Match.objects.all().filter(rating_type=2, game_type=0).count())
+    # print(Match.objects.all().filter(rating_type=0, game_type=0).count())
     ranked_1v1_match_ids = [match.id for match in ranked_1v1_matches]
 
     """
@@ -28,6 +30,11 @@ def collect_player_stats():
     items = Item.objects.filter(itemsets__in=itemset_queryset)
     """
 
+    # print(api_client.game_type_id_dict)
+    """
+    {'Random Map': 0, 'Regicide': 1, 'Death Match': 2, 'Scenario': 3, 'King of the Hill': 6, 'Wonder Race': 7, 'Defend the Wonder': 8, 
+    'Turbo Random Map': 9, 'Capture the Relic': 10, 'Sudden Death': 11, 'Battle Royale': 12, 'Empire Wars': 13, 'Co-Op Campaign': 15}
+    """
     # Need to filter out the MATCHES based on this. Hrrmm...
     # Do I want 1v1 Random Map
     # OR
@@ -49,6 +56,7 @@ def collect_player_stats():
         is_civ_picker = False
 
         player_matches = player.matches.filter(player=player.id, match__in=ranked_1v1_match_ids)
+        # print(player_matches.count())
 
         # Note: I thought about putting the time on the "PlayerMatch" Model,
         # But have decided against it as that really is duplicate information.
@@ -89,9 +97,21 @@ def collect_player_stats():
             first_match = player_matches[0]
         last_match = player_matches[total_matches_played - 1]
 
-        print("We're getting ratings, right?")
-        print(first_match.rating) # Have to make sure we have 1v1's and we are ranked.
-        print(last_match.rating)
+        # print("We're getting ratings, right?")
+        # # print(player_matches) # Okay this is fine...
+        # print(first_match.rating) # Have to make sure we have 1v1's and we are ranked.
+        # # print(first_match.match.ranked)
+        # # map_map = Match.objects.all().filter(id=first_match.match) 
+        # # print(map_map.ranked)
+        # print(last_match.rating)
+        # # map_map = Match.objects.all().filter(id=last_match.match) 
+        # # print(map_map.ranked)
+        # # print(last_match.match.ranked)
+
+        # Uggh I don't know about this...
+        # This is some last ditch error checking to make sure we can get data.
+        if first_match.rating == None or last_match.rating == None:
+            continue
 
         player_statistic = PlayerStatistics(
             player, 
