@@ -45,8 +45,47 @@ dataframe_dict = {
 }
 
 ranked_1v1_matches = Match.objects.all().filter(game_type=0, rating_type=2) 
-ranked_1v1_match_ids = [match.id for match in ranked_1v1_matches]
+ranked_1v1_match_ids = [match.id for match in ranked_1v1_matches] 
+
+# Don't have to do fancy footwork with splitting up the real data from
+# test data, the algorithm is smart enough to do that for me.
+matches_count = len(ranked_1v1_matches)
 
 """
 For match in match... collect data?
+"""
+for match in ranked_1v1_matches:
+    dataframe_dict["map"].append(match.map)
+    dataframe_dict["time_started"].append(match.started)
+    length = match.finished - match.started
+    dataframe_dict["game_length"].append(length)
+    player_one = match.players[0]
+    player_two = match.players[1]
+
+    # We need a color map - 1 is red, 2 is blue, etc.
+    dataframe_dict["player_one_civ"].append(player_one.civ)
+    dataframe_dict["player_one_rating"].append(player_one.rating)
+    dataframe_dict["player_one_color"].append(player_one.color)
+    # I think this will be our "Y" value.
+    dataframe_dict["player_one_victory"].append(player_one.won)
+
+    dataframe_dict["player_two_civ"].append(player_two.civ)
+    dataframe_dict["player_two_rating"].append(player_two.rating)
+    dataframe_dict["player_two_color"].append(player_two.color)
+    dataframe_dict["player_two_victory"].append(player_two.won)
+
+"""
+Once we have the data we machine learn it?
+"""
+"""
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+# This allocates 20% of the data for testing, the other 80% will be for training.
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
+model.fit(X_train, Y_train)
+predictions = model.predict(X_test)
+
+score = accuracy_score(Y_test, predictions)
+score
 """
