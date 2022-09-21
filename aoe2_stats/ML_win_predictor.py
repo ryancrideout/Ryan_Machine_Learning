@@ -25,10 +25,25 @@ First order of business is to make a data frame... so we need the data from abov
 This will help:
 https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.from_dict.html
 """
+
+"""
+DOWNLOAD DATA HERE!
+
+https://www.reddit.com/r/aoe2/comments/xj815r/aoepulse_database_dump_100_gb_5_million_games/
+https://github.com/SiegeEngineers/aoe2techtree
+https://archive.org/details/aoepulse_db
+
+Guy responsible for all of this:
+https://www.reddit.com/user/dj0wns/
+
+"""
 import pandas as pd
 from aoe2net_django.wsgi import *
-from aoe2net_database.models import Player, Match
+from aoe2net_database.models import Match
 from aoe2netapi import AOE2NETAPI
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
 
 dataframe_dict = {
     "player_one_civ": [],
@@ -74,18 +89,36 @@ for match in ranked_1v1_matches:
     dataframe_dict["player_two_color"].append(player_two.color)
     dataframe_dict["player_two_victory"].append(player_two.won)
 
-"""
-Once we have the data we machine learn it?
-"""
-"""
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
+# Make the dataframe. We're going to split this up into X and Y components.
+dataframe = pd.DataFrame.from_dict(dataframe_dict)
 
-# This allocates 20% of the data for testing, the other 80% will be for training.
+X = dataframe.drop(columns=["player_one_victory"])
+Y = dataframe["player_one_victory"]
+
+# Make our model and our training data.
+model = DecisionTreeClassifier()
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
 model.fit(X_train, Y_train)
 predictions = model.predict(X_test)
 
 score = accuracy_score(Y_test, predictions)
-score
+# Be sure to print out the score!
+
+# I think once we have the predictions (and have trained the model), then we can put it into a decision tree
+# 
+"""
+Once we have the data we machine learn it?
+"""
+"""
+from sklearn import tree
+
+tree.export_graphviz(
+    model, 
+    out_file='music-recommender.dot', 
+    feature_names=['age', 'gender'],
+    class_names=sorted(Y.unique()),
+    label='all',
+    rounded=True,
+    filled=True
+)
 """
