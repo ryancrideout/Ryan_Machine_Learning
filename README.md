@@ -39,6 +39,8 @@ Here is a site to get some more data sets: https://archive.ics.uci.edu/ml/datase
 
 Machine Learning Resources for Python: https://machinelearningmastery.com/start-here/#python
 
+A very comprehensive YouTube tutorial for Machine Learning: https://www.youtube.com/watch?v=GwIo3gDZCVQ
+
 Here are a couple links about GitHub structures for machine learning projects:
 - http://drivendata.github.io/cookiecutter-data-science/#directory-structure
 - https://github.com/drivendata/cookiecutter-data-science
