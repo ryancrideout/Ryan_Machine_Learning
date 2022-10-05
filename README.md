@@ -33,6 +33,14 @@ A project based on this tutorial `https://machinelearningmastery.com/machine-lea
 
 An Age of Empires II machine learning project that I've decided to embark on - the idea is to be able to pull win/loss records from real games online and then do STATISTICS on it.
 
+### MNIST Tutorial
+
+A project based on the MNIST dataset, this really is more of a tutorial to help familiarize myself with machine learning.
+
+### Notes
+
+A folder full of useful machine learning notes. Note (heh) that the notes live in Jupyter files. Type `jupyter-lab` in the console to activate Jupyter.
+
 ## Useful links
 
 Here is a site to get some more data sets: https://archive.ics.uci.edu/ml/datasets.php
