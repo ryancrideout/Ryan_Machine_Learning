@@ -52,3 +52,6 @@ A very comprehensive YouTube tutorial for Machine Learning: https://www.youtube.
 Here are a couple links about GitHub structures for machine learning projects:
 - http://drivendata.github.io/cookiecutter-data-science/#directory-structure
 - https://github.com/drivendata/cookiecutter-data-science
+
+Here is a good place to learn about machine learning (At $25/month):
+- https://www.datacamp.com/
